@@ -54,7 +54,6 @@ def update():
             'city': city_editor.get(),
             'state': state_editor.get(),
             'zipcode': zipcode_editor.get(),
-
             'oid': record_id
         })
 
@@ -63,19 +62,22 @@ def update():
     # Close connection
     conn.close()
 
+    editor.destroy()
+
 
 def edit():
+    global editor
     editor = Tk()
     editor.title('Update A Record')
     editor.iconbitmap('ghibli.ico')
-    editor.geometry("400x600")
+    editor.geometry("400x300")
 # Create a database or connect to one
     conn = sqlite3.connect('address_book.db')
     # Create cursor
     c = conn.cursor()
 
     record_id = delete_box.get()
-# Query the database
+
     c.execute("SELECT * FROM addresses WHERE oid = " + record_id)
     records = c.fetchall()
 
