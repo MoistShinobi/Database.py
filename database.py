@@ -34,6 +34,15 @@ def edit():
     editor.title('Update A Record')
     editor.iconbitmap('ghibli.ico')
     editor.geometry("400x600")
+    # Create a database or connect to one
+    conn = sqlite3.connect('address_book.db')
+    # Create cursor
+    c = conn.cursor()
+
+    record_id = delete_box.get()
+    # Query the database
+    c.execute("SELECT * FROM addresses WHERE oid = " + record_id)
+    records = c.fetchall()
 
     # Create Text Boxes
     f_name = Entry(root, width=30)
@@ -66,6 +75,19 @@ def edit():
     zipcode_label.grid(row=5, column=0)
     delete_box_label = Label(root, text="Select ID")
     delete_box_label.grid(row=9, column=0, pady=5)
+        
+    # Loop Through Results
+    for record in records:
+        f_name_editor.insert(0, record[0])
+        l_name_editor.insert(0, record[1])
+        address_editor.insert(0, record[2])
+        city_editor.insert(0, record[3])
+        state_editor.insert(0, record[4])
+        zipcode_editor.insert(0, record[5])
+
+    # Create a Save Button To Save Edited Record
+    save_btn = Button(editor, text="Save Record", command=edit)
+    save_btn.grid(row=6, column=0, columnspan=2, pady=10, padx=10, ipadx=145)
 
 # Create Function To Delete A Record
 def delete():
